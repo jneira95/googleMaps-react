@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { loadMap } from "../../../api/maps";
+import { loadMap } from "../../../scripts/maps";
 import styles from "./map.module.scss";
 
 export const Map: React.FC<MapProps> = ({ position }) => {
