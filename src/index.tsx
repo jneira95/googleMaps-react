@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./styles/index.scss";
-import Maps from "./components/Maps";
+import App from "./components/App";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Maps />
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );

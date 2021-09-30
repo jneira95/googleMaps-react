@@ -1,7 +1,7 @@
 import React from "react";
 
-function Maps() {
+function App() {
   return <div>Empty proyect</div>;
 }
 
-export default Maps;
+export default App;
