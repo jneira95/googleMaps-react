@@ -147,7 +147,9 @@ export const getPlaceIdPosition = (
         if (marker.placeId === placeId) isMarkerAlreadySave = true;
       });
 
-      if (!isMarkerAlreadySave) {
+      if (isMarkerAlreadySave) {
+        setMarkerPosition(map, position);
+      } else {
         store.dispatch(
           mapSlice.actions.saveMarkerPosition({
             position,
@@ -155,8 +157,6 @@ export const getPlaceIdPosition = (
             title: searchPrediction.structured_formatting.main_text,
           })
         );
-      } else {
-        setMarkerPosition(map, position);
       }
     }
   });
