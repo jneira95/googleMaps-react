@@ -9,14 +9,16 @@ import styles from "./searchBox.module.scss";
 interface SearchBoxProps {
   updateSearch: (value: string) => void;
   savePredictionOption: (placeId: PlaceId) => void;
+  getPredictions: (position: Position, guestSearch: string) => void;
   guestSearch: string;
   position: Position;
   searchPredictions: google.maps.places.AutocompletePrediction[] | null;
 }
 
-const UnconnectedSearchBox: React.FC<SearchBoxProps> = ({
+export const UnconnectedSearchBox: React.FC<SearchBoxProps> = ({
   updateSearch,
   savePredictionOption,
+  getPredictions,
   guestSearch,
   position,
   searchPredictions,
@@ -26,7 +28,7 @@ const UnconnectedSearchBox: React.FC<SearchBoxProps> = ({
   useEffect(() => {
     const timeOutUpdate = setTimeout(() => {
       updateSearch(inputValue);
-      inputValue && getSearchBoxPredictions(position, inputValue);
+      inputValue && getPredictions(position, inputValue);
     }, 300);
     return () => clearTimeout(timeOutUpdate);
   }, [inputValue]);
@@ -42,6 +44,7 @@ const UnconnectedSearchBox: React.FC<SearchBoxProps> = ({
         id="gsearch"
         name="gsearch"
         placeholder="Search"
+        aria-label="search-input"
         className={`${styles.input} ${guestSearch ? styles.isListActive : ""}`}
         onChange={handleUpdate}
         defaultValue={guestSearch}
@@ -72,6 +75,7 @@ const SearchBox = connect(
     guestSearch: state.maps.guestSearch,
     position: state.maps.position,
     searchPredictions: state.maps.searchPredictions,
+    getPredictions: getSearchBoxPredictions,
   }),
   {
     savePredictionOption: mapSlice.actions.savePredictionOption,

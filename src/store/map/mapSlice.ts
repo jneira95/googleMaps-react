@@ -1,13 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface MapSliceProps {
-  position: Position;
-  guestSearch: string;
-  markers: Marker[];
-  searchPredictions: google.maps.places.AutocompletePrediction[];
-  placeId: PlaceId | null;
-}
-
 const initialState: MapSliceProps = {
   //Barcelona default position
   position: { lat: 41.390205, lng: 2.154007 },

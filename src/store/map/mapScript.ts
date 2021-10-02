@@ -96,7 +96,7 @@ export const getSearchBoxPredictions = (
   );
 };
 
-export const loadMap = async (
+export const loadGoogleMap = async (
   mapContainer: HTMLDivElement,
   position: Position,
   setMap: React.Dispatch<React.SetStateAction<google.maps.Map | null>>

@@ -2,13 +2,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
-  loadMap,
   getPlaceIdPosition,
+  loadGoogleMap,
   loadNewMarker,
 } from "../../../store/map/mapScript";
 import { getSearchPredictionByPlaceId } from "../../../store/map/mapSelector";
 import { AppState } from "../../../store/store";
-import { MapContainer } from "./MapContainer";
+import MapContainer from "./MapContainer";
 
 interface MapProps {
   mapContainerRef: React.RefObject<HTMLDivElement>;
@@ -16,6 +16,12 @@ interface MapProps {
   placeId: PlaceId | null;
   markers: Marker[];
   searchPredictions: google.maps.places.AutocompletePrediction[];
+  loadMap: (
+    mapContainer: HTMLDivElement,
+    position: Position,
+    setMap: React.Dispatch<React.SetStateAction<google.maps.Map | null>>
+  ) => Promise<void>;
+  loadMarker: (map: google.maps.Map, markers: Marker[]) => void;
 }
 
 export const UnconnectedMap: React.FC<MapProps> = ({
@@ -24,6 +30,8 @@ export const UnconnectedMap: React.FC<MapProps> = ({
   placeId,
   markers,
   searchPredictions,
+  loadMap,
+  loadMarker,
 }) => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
 
@@ -44,7 +52,7 @@ export const UnconnectedMap: React.FC<MapProps> = ({
   }, [placeId]);
 
   useEffect(() => {
-    markers.length > 0 && map && loadNewMarker(map, markers);
+    markers.length > 0 && map && loadMarker(map, markers);
   }, [markers]);
 
   useEffect(() => {
@@ -59,6 +67,8 @@ const Map = connect((state: AppState) => ({
   placeId: state.maps.placeId,
   markers: state.maps.markers,
   searchPredictions: state.maps.searchPredictions,
+  loadMap: loadGoogleMap,
+  loadMarker: loadNewMarker,
 }))(UnconnectedMap);
 
 export default Map;
