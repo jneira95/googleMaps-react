@@ -1,12 +1,17 @@
 import React from "react";
 import Map from "../Common/Map/Map";
+import SearchBox from "../Common/SearchBox/SearchBox";
+import styles from "./app.module.scss";
 
-function App() {
+const App: React.FC<{}> = () => {
+  const mapContainerRef = React.createRef<HTMLDivElement>();
+
   return (
-    <div>
-      <Map position={{ lat: 41.390205, lng: 2.154007 }} />
+    <div className={styles.root}>
+      <SearchBox />
+      <Map mapContainerRef={mapContainerRef} />
     </div>
   );
-}
+};
 
 export default App;
