@@ -6,6 +6,8 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 Template: Typescript
 
+## Before start
+
 - Replace the .env.sample file to .env and add your API Key to make it work: https://developers.google.com/maps/documentation/javascript/get-api-key
 - Request to the API has been reduce, by initializing map onces, the searchBox had a 300ms delay after finish writting before it fetch for new suggestions.
 - If you click a suggestion it's going to show you the current location and save that position in redux.  
