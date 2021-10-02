@@ -1,19 +1,64 @@
-import React, { useCallback, useEffect, useRef } from "react";
-import { loadMap } from "../../../scripts/maps";
-import styles from "./map.module.scss";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useCallback, useEffect, useState } from "react";
+import { connect } from "react-redux";
+import {
+  loadMap,
+  getPlaceIdPosition,
+  loadNewMarker,
+} from "../../../store/map/mapScript";
+import { getSearchPredictionByPlaceId } from "../../../store/map/mapSelector";
+import { AppState } from "../../../store/store";
+import { MapContainer } from "./MapContainer";
 
-export const Map: React.FC<MapProps> = ({ position }) => {
-  const mapContainer = useRef<HTMLDivElement | null>(null);
+interface MapProps {
+  mapContainerRef: React.RefObject<HTMLDivElement>;
+  position: Position;
+  placeId: PlaceId | null;
+  markers: Marker[];
+  searchPredictions: google.maps.places.AutocompletePrediction[];
+}
+
+export const UnconnectedMap: React.FC<MapProps> = ({
+  mapContainerRef,
+  position,
+  placeId,
+  markers,
+  searchPredictions,
+}) => {
+  const [map, setMap] = useState<google.maps.Map | null>(null);
 
   const initMap = useCallback(() => {
-    mapContainer.current && loadMap(mapContainer.current, position);
+    mapContainerRef.current &&
+      loadMap(mapContainerRef.current, position, setMap);
   }, [position]);
+
+  useEffect(() => {
+    placeId &&
+      map &&
+      getPlaceIdPosition(
+        map,
+        placeId,
+        markers,
+        getSearchPredictionByPlaceId(searchPredictions, placeId)
+      );
+  }, [placeId]);
+
+  useEffect(() => {
+    markers.length > 0 && map && loadNewMarker(map, markers);
+  }, [markers]);
 
   useEffect(() => {
     initMap();
   }, [initMap]);
 
-  return <div ref={mapContainer} className={styles.map} />;
+  return <MapContainer ref={mapContainerRef} />;
 };
+
+const Map = connect((state: AppState) => ({
+  position: state.maps.position,
+  placeId: state.maps.placeId,
+  markers: state.maps.markers,
+  searchPredictions: state.maps.searchPredictions,
+}))(UnconnectedMap);
 
 export default Map;
